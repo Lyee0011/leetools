@@ -123,9 +123,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\smoke-windows.ps1 -B
 
 ## 给本地 Agent
 
-让 Agent 先读取仓库根目录的 `AGENTS.md` 和 `INSTALL.md`，再按安装、隐私约束和验收步骤执行。不要复制别人的配置、Cookie、浏览器资料或运行目录。安装入口返回真实端口、构建、进程号与目录，避免把打开一个旧页面误认为安装成功。
+让 Agent 先读取 `video-downloader` 目录中的 `AGENTS.md` 和 `INSTALL.md`，再按安装、隐私约束和验收步骤执行。不要复制别人的配置、Cookie、浏览器资料或运行目录。安装入口返回真实端口、构建、进程号与目录，避免把打开一个旧页面误认为安装成功。
 
 ## 项目结构
+
+`leetools` 首页只列各个小工具的文件夹。本工具的说明、许可、配置和源码都放在 `video-downloader/` 里，未来新增工具与它并列。
+
+当前保留本地测试脚本；首次发布的云端测试结果见 [验证记录](https://github.com/Lyee0011/leetools/actions/runs/35500647857)。为保持仓库根目录只有工具文件夹，GitHub 自动工作流与 Issue 模板已移入本工具的 `.github/` 作为参考，**当前不会自动运行或应用**。仍可正常提交普通 Issue。
 
 ```text
 server.js                       本地服务、网页和下载逻辑
@@ -140,6 +144,7 @@ scripts/package-source.ps1      从干净 Git 提交生成源码包
 dependencies.windows.json       依赖版本、下载源和校验信息
 focus-explorer.cs               资源管理器置顶助手源码
 tests/                          源码与本地服务检查
+.github/                        首次发布的 GitHub 配置参考（未启用）
 AGENTS.md                       Agent 操作契约
 THIRD_PARTY_NOTICES.md          第三方组件说明
 ```

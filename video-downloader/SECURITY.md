@@ -6,6 +6,8 @@ Security fixes target the latest commit on the `main` branch. The Windows launch
 
 ## Reporting a vulnerability
 
+Use [private vulnerability reporting](https://github.com/Lyee0011/leetools/security/advisories/new). For ordinary usage problems, open an [Issue](https://github.com/Lyee0011/leetools/issues).
+
 Do not publish working exploits that expose browser cookies, local paths, or executable-download weaknesses before a fix is available. Open a private GitHub security advisory for the repository owner and include:
 
 - affected commit and Windows version;

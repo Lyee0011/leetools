@@ -17,3 +17,29 @@ node_modules/
 
 # The macOS launcher is kept locally but is not part of the Windows-first release
 视频下载器.command
+
+# Public release privacy and generated-file exclusions
+.env
+.env.*
+!.env.example
+**/config.json
+**/bin/
+**/dist/
+**/.cleanroom/
+**/node_modules/
+**/User Data/
+**/Cookies
+**/cookies.txt
+**/cookies.json
+**/browser-profile*/
+*.db
+*.sqlite
+*.exe
+*.dll
+*.zip
+*.mp4
+*.mkv
+*.mov
+*.mp3
+*.m4a
+*.webm

@@ -1,6 +1,15 @@
 # Agent operating contract
 
-This repository is the source of truth for a local Windows video downloader. Read `README.md` before making changes.
+This directory is the source of truth for a local Windows video downloader. Read this directory's `README.md` before making changes.
+
+## Collection layout
+
+- The `leetools` repository root contains only tool directories. Keep this tool in `video-downloader/`; future tools get their own sibling directories.
+- Keep each tool's README, license, rules, ignore patterns, tests, and configuration inside its own directory. Do not recreate root README, LICENSE, AGENTS.md, or `.github` just to enable repository-wide features.
+- The nested `.github/` preserves the first release's configuration as a reference. GitHub does not activate workflows or issue templates from this nested location; local tests remain available.
+- Releases contain reviewed source and launchers. Third-party binaries may only be redistributed after completing their own licensing and corresponding-source requirements.
+- Never commit `.env` files, credentials, personal configuration, browser profiles, cookies, runtime binaries or generated media. Maintain the tool-local `.gitignore`.
+- Use the maintainer's GitHub noreply address for commits, not a personal email address.
 
 ## Supported target
 

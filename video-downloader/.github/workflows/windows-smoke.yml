@@ -1,5 +1,6 @@
 name: Windows downloader checks
 
+# Reference only: GitHub does not run workflows from a tool subdirectory.
 on:
   push:
     paths:

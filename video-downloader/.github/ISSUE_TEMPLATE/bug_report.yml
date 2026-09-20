@@ -1,4 +1,5 @@
 name: 使用问题 / Bug
+# Reference only: GitHub does not load templates from a tool subdirectory.
 description: 下载、启动或其他使用问题
 body:
   - type: markdown
