@@ -1,0 +1,44 @@
+name: Windows downloader checks
+
+on:
+  push:
+    paths:
+      - 'video-downloader/**'
+      - '.github/workflows/windows-smoke.yml'
+      - '.gitattributes'
+  pull_request:
+    paths:
+      - 'video-downloader/**'
+      - '.github/workflows/windows-smoke.yml'
+      - '.gitattributes'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fresh-install:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: powershell
+        working-directory: 'source [Windows]/video-downloader'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: 'source [Windows]'
+      - name: Prepare a fresh Windows installation
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install-windows.ps1 -Json -NoStart
+      - name: Verify runtime, local downloads and browser cleanup
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\smoke-windows.ps1 -BrowserIntegration
+      - name: Verify first and repeated launch
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\install-entrypoint.ps1
+      - name: Package only the downloader subdirectory
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\package-source.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-downloader-windows-x64
+          path: 'source [Windows]/video-downloader/dist/*'
+          if-no-files-found: error
+          retention-days: 14

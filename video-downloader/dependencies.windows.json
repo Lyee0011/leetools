@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "platform": "windows-x64",
+  "node": {
+    "version": "v22.14.0",
+    "archive": "node-v22.14.0-win-x64.zip",
+    "sha256": "55b639295920b219bb2acbcfa00f90393a2789095b7323f79475c9f34795f217",
+    "executableSha256": "33b1bc1a8aca11fd5a4f2699e51019c63c0af30cf437701d07af69be7706771b",
+    "urls": [
+      "https://nodejs.org/dist/v22.14.0/node-v22.14.0-win-x64.zip",
+      "https://registry.npmmirror.com/-/binary/node/v22.14.0/node-v22.14.0-win-x64.zip"
+    ]
+  },
+  "ffmpeg": {
+    "version": "6.1.1-static",
+    "sha256": "04e1307997530f9cf2fe35cba2ca7e8875ca91da02f89d6c7243df819c94ad00",
+    "urls": [
+      "https://github.com/eugeneware/ffmpeg-static/releases/download/b6.1.1/ffmpeg-win32-x64",
+      "https://registry.npmmirror.com/-/binary/ffmpeg-static/b6.1.1/ffmpeg-win32-x64"
+    ]
+  },
+  "ytDlp": {
+    "channel": "nightly",
+    "version": "2026.08.04.234419",
+    "sha256": "e78500d301b5de3a9280a418f6dd45604c4d85b718b0a2447c1b0aa9699e2689",
+    "urls": [
+      "https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/download/2026.08.04.234419/yt-dlp.exe",
+      "https://ghfast.top/https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/download/2026.08.04.234419/yt-dlp.exe"
+    ]
+  }
+}

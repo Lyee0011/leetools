@@ -1,0 +1,31 @@
+name: 使用问题 / Bug
+description: 下载、启动或其他使用问题
+body:
+  - type: markdown
+    attributes:
+      value: 请勿上传 Cookie、账号令牌、私密链接或含个人路径的原始日志。贴日志前先打码。
+  - type: input
+    id: tool
+    attributes:
+      label: 工具与版本
+      placeholder: 视频下载器 v1.0.0
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: 系统
+      placeholder: Windows 11 x64
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 如何遇到问题
+      description: 包括期望结果和实际结果；网站只需提供名称，除非链接确实公开且不含令牌。
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: 错误提示或已打码的截图

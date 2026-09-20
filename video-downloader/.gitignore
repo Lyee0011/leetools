@@ -1,0 +1,19 @@
+# Runtime binaries are rebuilt by scripts/bootstrap-windows.ps1
+bin/
+
+# Per-computer preferences and generated files
+config.json
+.DS_Store
+*.part
+*.log
+.视频下载器临时/
+.cleanroom/
+dist/
+
+# Editor and package-manager noise
+.vscode/
+.idea/
+node_modules/
+
+# The macOS launcher is kept locally but is not part of the Windows-first release
+视频下载器.command
