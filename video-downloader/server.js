@@ -755,7 +755,7 @@ function runYtdlpJob(job, options = {}) {
 // ── HTML 界面(内嵌单页) ──
 const PAGE = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>视频下载器</title>
+<title>小伊工具箱 · 视频下载器</title>
 <style>
 :root{color-scheme:light;--bg:#f5f5f7;--surface:rgba(255,255,255,.78);--surface-solid:#fff;--field:#f5f5f7;--line:rgba(0,0,0,.08);--line-strong:rgba(0,0,0,.13);--tx:#1d1d1f;--tx2:#6e6e73;--tx3:#98989d;--blue:#0071e3;--blue-hover:#0077ed;--red:#d70015;--green:#168c4b;--shadow:0 22px 70px rgba(0,0,0,.10)}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -801,33 +801,36 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .meta a{color:var(--blue);text-decoration:none;cursor:pointer}
 .meta a:hover{text-decoration:underline}
 .err{color:var(--red);font-size:11px;margin-top:8px;line-height:1.55;word-break:break-all}
+.empty{padding:20px 12px;text-align:center;color:var(--tx3);font-size:12px}
 .foot{margin:18px auto 0;padding:12px 16px;max-width:680px;text-align:center;font-size:10.5px;color:var(--tx3);line-height:2;background:rgba(255,255,255,.34);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .badge{display:inline-block;padding:0 7px;border:1px solid var(--line);border-radius:999px;margin:0 2px;background:rgba(255,255,255,.3)}
 .badge.on{color:var(--green);border-color:rgba(22,140,75,.22)}
 .badge.off{color:var(--tx3)}
+.foot a{color:var(--tx2);text-decoration:none}.foot a:hover{text-decoration:underline}
+.status{margin-top:3px}.status summary{cursor:pointer;color:var(--tx2);list-style:none}.status summary::-webkit-details-marker{display:none}.status summary::before{content:'＋';margin-right:4px}.status[open] summary::before{content:'－'}
 @media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#050507;--surface:rgba(28,28,30,.72);--surface-solid:#1c1c1e;--field:#242426;--line:rgba(255,255,255,.09);--line-strong:rgba(255,255,255,.17);--tx:#f5f5f7;--tx2:#a1a1a6;--tx3:#6e6e73;--blue:#0a84ff;--blue-hover:#2490ff;--red:#ff453a;--green:#30d158;--shadow:0 28px 80px rgba(0,0,0,.42)}body{background:radial-gradient(circle at 50% -18%,rgba(10,132,255,.18),transparent 40%),var(--bg)}.platforms span,.badge,.foot{background:rgba(28,28,30,.42)}}
 @media(max-width:620px){body{padding:38px 14px 28px}.hero{margin-bottom:25px}.appicon{width:44px;height:44px;border-radius:13px;margin-bottom:15px}h1{font-size:29px}.card{padding:17px;border-radius:19px}.row{flex-direction:column}.row .primary{width:100%}.dirrow{align-items:flex-end}.actions{flex-shrink:0}.dirrow button{padding:9px 11px}.foot{font-size:10px}}
 </style></head><body><div class="wrap">
 <header class="hero">
   <div class="appicon" aria-hidden="true">↓</div>
-  <h1>视频下载器</h1>
-  <div class="sub">把喜欢的视频，干净地保存下来。</div>
+  <h1>小伊工具箱 · 视频下载器</h1>
+  <div class="sub">把不好用的地方改一改，再分享给你。</div>
   <div class="platforms"><span>抖音</span><span>小红书</span><span>B 站</span><span>YouTube</span><span>更多网站与视频直链</span></div>
 </header>
 <main class="card">
-  <label class="label" for="url">视频链接</label>
+  <label class="label" for="url">把视频链接贴在这里</label>
   <div class="row">
-    <input id="url" type="text" placeholder="粘贴视频分享链接或播放地址" autocomplete="off" autofocus>
+    <input id="url" type="text" placeholder="粘贴抖音、小红书、B站、YouTube 等视频链接" autocomplete="off" autofocus>
     <button id="go" class="primary">开始下载</button>
   </div>
   <div class="formerr" id="formErr"></div>
-  <p style="color:var(--tx3);font-size:11px;line-height:1.6;margin-top:12px">支持视频分享页及 MP4 / M3U8 / MPD 直链。不同网站的可下载范围与清晰度有所不同。</p>
+  <p style="color:var(--tx3);font-size:11px;line-height:1.6;margin-top:12px">文件只保存在你的电脑里，不会上传到我的服务器。不同网站能下载的内容和清晰度可能不同。</p>
   <div class="dirrow">
-    <div class="location"><span class="eyebrow">保存位置</span><span class="path" id="dir">…</span></div>
-    <div class="actions"><button id="pick">更改</button><button id="openDir">打开</button></div>
+    <div class="location"><span class="eyebrow">文件保存到</span><span class="path" id="dir">…</span></div>
+    <div class="actions"><button id="pick">更改</button><button id="openDir">打开文件夹</button></div>
   </div>
 </main>
-<div class="jobs-head"><span>下载记录</span><button id="clearHistory" type="button">清理历史记录</button></div>
+<div class="jobs-head"><span>下载记录</span><button id="clearHistory" type="button">清空记录（不会删视频）</button></div>
 <div id="jobs"></div>
 <div class="foot" id="foot"></div>
 <script nonce="${PAGE_NONCE}">
@@ -835,15 +838,15 @@ const $=s=>document.querySelector(s);
 const API_TOKEN=${JSON.stringify(API_TOKEN)};
 async function api(p,body){const r=await fetch(p,body?{method:'POST',headers:{'Content-Type':'application/json','X-Video-Downloader-Token':API_TOKEN},body:JSON.stringify(body)}:undefined);const data=await r.json();if(!r.ok)throw new Error(data.err||('HTTP '+r.status));return data;}
 async function refreshConf(){const c=await api('/api/config');$('#dir').textContent=c.dir;
-  $('#foot').innerHTML='引擎 yt-dlp <span class="badge '+(c.ytdlp?'on">✓':'off">缺失')+'</span> 高清合并 <span class="badge '+(c.ffmpeg?'on">✓':'off">无ffmpeg')+'</span> YouTube 运行时 <span class="badge '+(c.jsRuntime?'on">✓':'off">缺失')+'</span> 代理 <span class="badge '+(c.proxy?'on">已连 '+esc(c.proxyPort||''):'off">未开')+'</span><br>抖音使用隔离游客通道，受限时自动建立一次性匿名会话；小红书公开通道优先，受限时自动只读浏览器登录状态且不保存 Cookie。工具只在本机运行。';}
+  $('#foot').innerHTML='小伊做的小工具 · <a href="https://github.com/Lyee0011/leetools">开源于 GitHub</a><br>本地运行，文件不上传；请只下载你有权保存的内容。<details class="status"><summary>查看运行状态</summary>引擎 yt-dlp <span class="badge '+(c.ytdlp?'on">✓':'off">缺失')+'</span> 高清合并 <span class="badge '+(c.ffmpeg?'on">✓':'off">无ffmpeg')+'</span> YouTube 运行时 <span class="badge '+(c.jsRuntime?'on">✓':'off">缺失')+'</span> 代理 <span class="badge '+(c.proxy?'on">已连 '+esc(c.proxyPort||''):'off">未开')+'</span><br>抖音使用隔离游客通道；小红书公开通道优先，受限时自动只读浏览器登录状态且不保存 Cookie。</details>';}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function render(list){$('#clearHistory').disabled=!list.some(j=>j.status!=='running');$('#jobs').innerHTML=list.map(j=>{
+function render(list){$('#clearHistory').disabled=!list.some(j=>j.status!=='running');$('#jobs').innerHTML=list.length?list.map(j=>{
   const running=(j.phase?esc(j.phase)+' · ':'')+j.pct.toFixed(1)+'% '+(j.speed?'· '+esc(j.speed):'')+' '+(j.eta&&j.eta!=='Unknown'?'ETA '+esc(j.eta):'');
-  const st=j.status==='done'?'<span class="st-done">完成'+(j.note?' · '+esc(j.note):'')+'</span>':j.status==='error'?'<span class="st-err">失败</span>':running;
-  return '<div class="job '+esc(j.status)+'"><div class="name">'+esc(j.name)+'</div><div class="bar"><i style="width:'+j.pct+'%"></i></div><div class="meta"><span>'+st+'</span>'+(j.status==='done'?'<a href="#" data-reveal-job="'+esc(j.id)+'">在文件夹中显示</a>':j.status==='error'?'<a href="#" data-retry-job="'+esc(j.id)+'">重试</a>':'')+'</div>'+(j.err?'<div class="err">'+esc(j.err)+'</div>':'')+'</div>';
-}).join('');$('#jobs').querySelectorAll('[data-reveal-job]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();api('/api/reveal',{id:a.dataset.revealJob});}));
+  const st=j.status==='done'?'<span class="st-done">下载好了'+(j.note?' · '+esc(j.note):'')+'</span>':j.status==='error'?'<span class="st-err">下载失败</span>':running;
+  return '<div class="job '+esc(j.status)+'"><div class="name">'+esc(j.name)+'</div><div class="bar"><i style="width:'+j.pct+'%"></i></div><div class="meta"><span>'+st+'</span>'+(j.status==='done'?'<a href="#" data-reveal-job="'+esc(j.id)+'">打开文件所在位置</a>':j.status==='error'?'<a href="#" data-retry-job="'+esc(j.id)+'">再试一次</a>':'')+'</div>'+(j.err?'<div class="err">'+esc(j.err)+'</div>':'')+'</div>';
+}).join(''):'<div class="empty">还没有下载记录，贴一个链接试试。</div>';$('#jobs').querySelectorAll('[data-reveal-job]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();api('/api/reveal',{id:a.dataset.revealJob});}));
 $('#jobs').querySelectorAll('[data-retry-job]').forEach(a=>a.addEventListener('click',async e=>{e.preventDefault();if(a.dataset.busy)return;a.dataset.busy='1';a.textContent='正在重试…';try{await api('/api/retry',{id:a.dataset.retryJob});tick();}catch(error){const field=$('#formErr');field.textContent=error.message;field.classList.add('show');a.textContent='重试';delete a.dataset.busy;}}));}
-$('#clearHistory').onclick=async()=>{const btn=$('#clearHistory');if(btn.disabled)return;btn.disabled=true;btn.textContent='正在清理…';try{await api('/api/clear-history',{});await tick();}catch(error){const field=$('#formErr');field.textContent=error.message||'清理历史记录失败';field.classList.add('show');}finally{btn.textContent='清理历史记录';}};
+$('#clearHistory').onclick=async()=>{const btn=$('#clearHistory');if(btn.disabled)return;btn.disabled=true;btn.textContent='正在清空…';try{await api('/api/clear-history',{});await tick();}catch(error){const field=$('#formErr');field.textContent=error.message||'清空记录失败';field.classList.add('show');}finally{btn.textContent='清空记录（不会删视频）';}};
 async function tick(){const l=await api('/api/jobs');render(l);if(l.some(j=>j.status==='running'))setTimeout(tick,800);else setTimeout(tick,3000);}
 $('#go').onclick=async()=>{const input=$('#url'),btn=$('#go'),err=$('#formErr'),u=input.value.trim();if(!u)return;err.classList.remove('show');err.textContent='';btn.disabled=true;btn.textContent='正在添加…';try{await api('/api/download',{url:u});input.value='';tick();}catch(e){err.textContent=e.message||'下载任务创建失败';err.classList.add('show');}finally{btn.disabled=false;btn.textContent='开始下载';}};
 $('#url').addEventListener('keydown',e=>{if(e.key==='Enter')$('#go').click();});
