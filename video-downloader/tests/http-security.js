@@ -141,6 +141,17 @@ async function waitForPage(port) {
     });
     assert.strictEqual(retryForgedId.status, 400);
 
+    const clearWithoutToken = await request(port, {
+      method: 'POST', path: '/api/clear-history', headers: { 'Content-Type': 'application/json' }, body: '{}',
+    });
+    assert.strictEqual(clearWithoutToken.status, 403);
+    const clearHistory = await request(port, {
+      method: 'POST', path: '/api/clear-history',
+      headers: { 'Content-Type': 'application/json', 'X-Video-Downloader-Token': token }, body: '{}',
+    });
+    assert.strictEqual(clearHistory.status, 200);
+    assert.strictEqual(JSON.parse(clearHistory.body).cleared, 0);
+
     const invalidYangshipin = await request(port, {
       method: 'POST', path: '/api/download',
       headers: { 'Content-Type': 'application/json', 'X-Video-Downloader-Token': token },

@@ -55,5 +55,8 @@ const serverSource = fs.readFileSync(path.join(root, 'server.js'), 'utf8');
 assert.strictEqual(serverSource.includes('<a onclick='), false);
 assert.strictEqual(serverSource.includes('X-Video-Downloader-Token'), true);
 assert.strictEqual(serverSource.includes("frame-ancestors 'none'"), true);
+assert.strictEqual(serverSource.includes("/api/clear-history"), true);
+assert.match(serverSource, /job\.status !== 'running'/);
+assert.strictEqual(serverSource.includes('<span>央视频</span>'), false);
 
 console.log('Source smoke tests passed.');
