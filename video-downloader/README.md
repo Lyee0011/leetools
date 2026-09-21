@@ -2,7 +2,7 @@
 
 一个只在本机运行的 Windows 视频下载工具。粘贴链接、选好保存位置，就可以查看进度并下载视频。底层使用 yt-dlp、FFmpeg 和 Node.js。
 
-**[下载 Windows 启动包](https://github.com/Lyee0011/leetools/releases/download/video-downloader-v1.0.1/video-downloader-windows-x64.zip)** · [发布记录](https://github.com/Lyee0011/leetools/releases) · [反馈问题](https://github.com/Lyee0011/leetools/issues)
+**[下载 Windows 启动包](https://github.com/Lyee0011/leetools/releases/download/video-downloader-v1.0.2/video-downloader-windows-x64.zip)** · [发布记录](https://github.com/Lyee0011/leetools/releases) · [反馈问题](https://github.com/Lyee0011/leetools/issues)
 
 支持范围包括抖音、小红书、B站、YouTube、央视频、yt-dlp 可解析的网站和 MP4 / M3U8 / MPD 地址。**不保证每个链接都成功，也不保证所有网站都免登录。**
 

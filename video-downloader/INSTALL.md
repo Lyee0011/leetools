@@ -6,7 +6,7 @@
 
 > 请从我给的仓库地址安装视频下载器。先检查 README、AGENTS.md、安装脚本和固定依赖清单，按我的安装位置偏好选择可写目录。克隆或解压源码，找到下载器根目录，运行 `scripts/install-windows.ps1 -Json`。只有返回 `ok: true`、`started: true`，且实际服务的构建与组件状态匹配，才告诉我安装成功并打开返回地址。不要复制他人的配置、账号或 Cookie，不要修改全局执行策略；失败时报告原因，不跳过校验。
 
-仓库地址：https://github.com/Lyee0011/leetools 。工具位于 `video-downloader/` 子目录，安装命令必须在这个子目录执行。普通用户可直接下载 [单工具启动包](https://github.com/Lyee0011/leetools/releases/download/video-downloader-v1.0.1/video-downloader-windows-x64.zip)。
+仓库地址：https://github.com/Lyee0011/leetools 。工具位于 `video-downloader/` 子目录，安装命令必须在这个子目录执行。普通用户可直接下载 [单工具启动包](https://github.com/Lyee0011/leetools/releases/download/video-downloader-v1.0.2/video-downloader-windows-x64.zip)。
 
 ## 安装与验收
 
