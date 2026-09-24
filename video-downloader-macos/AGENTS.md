@@ -2,7 +2,7 @@
 
 Read README.md and INSTALL.md first. This is an independent macOS preview, copied from the Windows tool at commit bac9ed1. Do not edit ../video-downloader or replace its release assets to work on this version.
 
-- Target macOS 13+, native Apple Silicon arm64 first; Intel x64 is also prepared. No physical Mac has yet been used for acceptance testing. Never describe host-only tests as Mac validation.
+- Target macOS 13+, native Apple Silicon arm64 first; Intel x64 is also prepared. Apple Silicon macOS 26.2 automated acceptance is recorded in tests/VALIDATION.md; native UI and real-platform downloads still need manual acceptance. Never describe host-only tests as Mac validation.
 - Keep source, rules, license, tests and launchers inside this directory. No root .github or root documentation.
 - No npm dependencies, sudo, global install, security disabling, or blanket quarantine removal.
 - Download only immutable dependencies from dependencies.macos.json. Pin SHA-256 in the repository; verify existing files before execution, even a version probe. Do not discover arbitrary PATH versions.

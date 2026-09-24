@@ -60,4 +60,25 @@ assert.match(serverSource, /job\.status !== 'running'/);
 assert.strictEqual(serverSource.includes('<span>央视频</span>'), false);
 assert.strictEqual(serverSource.includes('--cookies-from-browser'), false, 'Mac preview must not read personal browser login state');
 
+if (process.platform === 'darwin') {
+  const { spawnSync } = require('child_process');
+  const bootstrap = fs.readFileSync(path.join(root, 'scripts/bootstrap-macos.sh'), 'utf8');
+  const progressLines = bootstrap.split('\n').filter(line => line.includes("printf '%s\\n'") && /准备|运行组件已校验/.test(line));
+  const progress = spawnSync('/bin/bash', ['-c', 'set -eu\nNAME=ffmpeg\nSTEP=2\nARCH=arm64\n' + progressLines.join('\n')], {
+    encoding: 'utf8', env: { ...process.env, LC_ALL: 'en_US.UTF-8' },
+  });
+  assert.strictEqual(progress.status, 0, progress.stderr);
+  assert.match(progress.stderr, /2\/3 准备 ffmpeg…/);
+  assert.match(progress.stderr, /运行组件已校验（arm64）。/);
+  const exitTrap = bootstrap.split('\n').find(line => /^trap .* EXIT$/.test(line));
+  for (const [ending, expected] of [
+    ['unset BOOTSTRAP_MISSING_TEST; printf "%s" "$BOOTSTRAP_MISSING_TEST"', 1],
+    ['exit 7', 7],
+    ['BOOTSTRAP_COMPLETE=1', 0],
+  ]) {
+    const cleanupExit = spawnSync('/bin/bash', ['-c', 'set -eu\nBOOTSTRAP_COMPLETE=0\ncleanup() { :; }\n' + exitTrap + '\n' + ending], { encoding: 'utf8' });
+    assert.strictEqual(cleanupExit.status, expected, 'Bootstrap cleanup must preserve failure: ' + cleanupExit.stderr);
+  }
+}
+
 console.log('Source smoke tests passed.');

@@ -1,6 +1,6 @@
 # macOS 预览版安装与验收
 
-范围：macOS 13+，Apple Silicon arm64 / Intel x64。当前状态：实现完成后进行预览测试，尚无 Mac 实机通过记录。先读 AGENTS.md。不要改动相邻的 Windows 项目或原发布链接。
+范围：macOS 13+，Apple Silicon arm64 / Intel x64。当前状态：Apple Silicon / macOS 26.2 的自动实机检查已通过，原生界面、实际平台下载及 Intel 仍待验收；详见 tests/VALIDATION.md。先读 AGENTS.md。不要改动相邻的 Windows 项目或原发布链接。
 
 ## 安装
 
@@ -47,6 +47,7 @@ cd "/实际路径/video-downloader-macos"
 
 ## 故障
 
+- 系统 Bash 3.2：本机修复版对中文标点前的变量使用 `${NAME}` / `${ARCH}`，并要求组件准备完整结束后才返回成功，避免 `unbound variable` 被退出清理误报为成功。新增回归检查已纳入 `tests/source-smoke.js`。
 - 下载失败：查看 `bin/setup-last.log`，确认可以访问清单中的地址。macOS 的“系统代理”不一定被 curl 继承；确有本机代理时，可只为本次终端设置用户提供的 `HTTPS_PROXY`。不得硬编码作者的代理地址。
 - 安装中断留下锁：先确认另一个安装窗口没有运行，再删除本目录的空文件夹 `bin/.setup-lock`，然后重试。不要删除整个 bin 或其他目录。
 - 组件哈希不符：拒绝执行；不要更新本地清单去迎合未知下载文件。向维护者反馈组件名即可。
