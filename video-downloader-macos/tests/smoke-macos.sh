@@ -1,12 +1,13 @@
 #!/bin/bash
 set -euo pipefail
+unset NODE_OPTIONS NODE_PATH
 ROOT="$(cd -- "$(dirname -- "$0")/.." && pwd -P)"
 [ "$(uname -s)" = Darwin ] || { printf '%s\n' '此测试需要真正的 Mac' >&2; exit 1; }
 cd -- "$ROOT"
 /bin/bash scripts/bootstrap-macos.sh
 NODE="$ROOT/bin/node"
 "$NODE" --check server.js
-for TEST in source-smoke runtime macos-platform yangshipin browser-resolver http-security download-integrity; do
+for TEST in source-smoke runtime macos-platform service-macos yangshipin browser-resolver http-security download-integrity; do
   "$NODE" "tests/$TEST.js"
 done
 if [ "${1:-}" = --browser ]; then "$NODE" tests/browser-integration.js; fi

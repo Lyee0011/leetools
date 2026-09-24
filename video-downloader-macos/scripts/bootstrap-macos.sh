@@ -3,6 +3,7 @@
 set -euo pipefail
 umask 077
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin
+unset NODE_OPTIONS NODE_PATH
 ROOT="$(cd -- "$(dirname -- "$0")/.." && pwd -P)"
 BIN="$ROOT/bin"
 MANIFEST="$ROOT/dependencies.macos.json"

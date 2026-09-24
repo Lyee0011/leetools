@@ -1,5 +1,7 @@
 #!/bin/bash
 set -euo pipefail
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin
+unset NODE_OPTIONS NODE_PATH
 ROOT="$(cd -- "$(dirname -- "$0")/.." && pwd -P)"
 case "$(uname -s)" in Darwin) ;; *) printf '%s\n' '此入口仅用于 macOS' >&2; exit 1 ;; esac
 for ARG in "$@"; do

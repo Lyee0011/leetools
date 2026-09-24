@@ -761,7 +761,6 @@ button:disabled{opacity:.45;cursor:default;transform:none}
   <div class="appicon" aria-hidden="true">↓</div>
   <h1>小伊工具箱 · 视频下载器</h1>
   <p class="sub">macOS 预览版 · 等你一起实测</p>
-  <div class="sub">把不好用的地方改一改，再分享给你。</div>
   <div class="platforms"><span>抖音</span><span>小红书</span><span>B 站</span><span>YouTube</span><span>更多网站与视频直链</span></div>
 </header>
 <main class="card">
@@ -923,6 +922,7 @@ const server = http.createServer(async (req, res) => {
     platform: process.platform,
     arch: process.arch,
     preview: true,
+    shuttingDown,
     dir: conf.dir,
     ytdlp: !!YTDLP_CMD,
     ffmpeg: !!FFMPEG,

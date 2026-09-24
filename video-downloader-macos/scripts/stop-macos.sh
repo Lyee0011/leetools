@@ -1,5 +1,7 @@
 #!/bin/bash
 set -euo pipefail
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin
+unset NODE_OPTIONS NODE_PATH
 ROOT="$(cd -- "$(dirname -- "$0")/.." && pwd -P)"
 [ "$(uname -s)" = Darwin ] || { printf '%s\n' '此入口仅用于 macOS' >&2; exit 1; }
 [ ! -L "$ROOT/bin" ] || { printf '%s\n' 'bin 不能是符号链接。' >&2; exit 1; }
