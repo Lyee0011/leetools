@@ -19,6 +19,7 @@ const { verifiedRuntime } = require('./scripts/runtime');
 const yangshipin = require('./scripts/yangshipin');
 const { describeDownloadError } = require('./scripts/download-errors');
 const browserDiscovery = require('./scripts/browser-resolver');
+const bilibiliDownload = require('./scripts/bilibili-download');
 
 const CONF_PATH = path.join(__dirname, 'config.json');
 const DEFAULT_DIR = path.join(os.homedir(), 'Downloads', '视频素材');
@@ -28,6 +29,7 @@ const DEPENDENCIES = require('./dependencies.windows.json');
 const INSTANCE_ID = crypto.createHash('sha256').update(path.resolve(__dirname).toLowerCase()).digest('hex').slice(0, 12);
 const BUILD_ID = crypto.createHash('sha256').update([
   'server.js', 'scripts/yangshipin.js', 'scripts/download-errors.js', 'scripts/douyin-anonymous-resolver.js', 'scripts/browser-resolver.js', 'scripts/runtime.js', 'dependencies.windows.json',
+  'scripts/bilibili-download.js', 'scripts/yt-dlp-plugins/leetools/yt_dlp_plugins/extractor/leetools_bilibili.py',
 ].map(file => file + '\0' + fs.readFileSync(path.join(__dirname, file), 'utf8')).join('\0')).digest('hex').slice(0, 12);
 const API_TOKEN = crypto.randomBytes(32).toString('base64url');
 const PAGE_NONCE = crypto.randomBytes(18).toString('base64url');
@@ -633,6 +635,7 @@ function runYtdlpJob(job, options = {}) {
   const { url, dir } = job;
   const downloadUrl = options.mediaUrl || url;
   const isXhs = isXiaohongshuUrl(url);
+  const isBili = !options.fromBrowser && bilibiliDownload.isBilibiliUrl(url);
   const tempDir = path.join(dir, '.视频下载器临时', job.id);
   const args = ['--no-config', '--encoding', 'utf-8', '--newline', '--progress', '--no-playlist', '--no-overwrites', '--abort-on-unavailable-fragments', '-P', dir, '-P', `temp:${tempDir}`, '-o', '%(title).80s [%(id)s].%(ext)s',
     '--print', 'after_move:__FINAL_FILE__%(filepath)s',
@@ -644,9 +647,7 @@ function runYtdlpJob(job, options = {}) {
   // 优先 m4a(AAC) 音轨:opus 塞进 mp4 后 QuickTime 播放无声;B站本就是 AAC 不受影响
   if (FFMPEG) { args.push('-f', 'bv*[ext=mp4]+ba[ext=m4a]/bv*+ba/b', '--merge-output-format', 'mp4', '--ffmpeg-location', FFMPEG); }
   else { args.push('-f', 'b'); }
-  // B站补齐 Referer；Clash 开启时统一交给其规则选择直连或代理线路。
-  if (/bilibili\.com|b23\.tv/.test(url)) args.push('--add-header', 'Referer:https://www.bilibili.com/');
-  if (ACTIVE_PROXY) args.push('--proxy', ACTIVE_PROXY);
+  if (!isBili && ACTIVE_PROXY) args.push('--proxy', ACTIVE_PROXY);
   if (options.fromBrowser) {
     args.push('--referer', options.referer, '--user-agent', options.userAgent);
     const videoId = crypto.createHash('sha256').update(url).digest('hex').slice(0, 10);
@@ -659,6 +660,7 @@ function runYtdlpJob(job, options = {}) {
     job.attempt = attempt;
     job.status = 'running';
     job.phase = cookieBrowser ? `读取 ${cookieBrowser} 登录状态后下载小红书` : (attempt > 1 ? '自动重试' : options.fromBrowser ? '下载网页视频' : '准备下载');
+    if (isBili) job.phase = attempt > 1 && ACTIVE_PROXY ? '切换直连并检测B站备用地址' : '检测B站可用下载地址';
     job.err = '';
     job.pct = 0;
     job.speed = '';
@@ -670,6 +672,7 @@ function runYtdlpJob(job, options = {}) {
       PYTHONUNBUFFERED: '1',
     };
     const runArgs = args.slice();
+    if (isBili) runArgs.push(...bilibiliDownload.attemptArgs(__dirname, ACTIVE_PROXY, attempt));
     if (cookieBrowser) runArgs.push('--cookies-from-browser', cookieBrowser);
     runArgs.push('--', downloadUrl);   // 原链接和识别后的地址都通过独立参数传递。
     const child = spawn(YTDLP_CMD[0], YTDLP_CMD.slice(1).concat(runArgs), { env: childEnv, windowsHide: true });
@@ -729,11 +732,17 @@ function runYtdlpJob(job, options = {}) {
         job.phase = '尝试本机浏览器登录状态'; job.err = ''; job.pct = 0; job.merging = false;
         return setTimeout(() => startAttempt(attempt + 1, cookieIndex + 1), 300);
       }
+      if (isBili && attempt < 2 && bilibiliDownload.isConnectionFailure(errTail)) {
+        job.phase = ACTIVE_PROXY ? '准备切换直连重试' : '重新获取B站下载地址';
+        job.err = ''; job.pct = 0; job.merging = false;
+        return setTimeout(() => startAttempt(attempt + 1, cookieIndex), 600);
+      }
       if (attempt < 2 && (/No such file|timed out|timeout|handshake|TLS|SSL|EOF|ConnectionReset|10054|reset by peer|远程主机|temporar|HTTP Error (?:4(?:12|29)|5)/i.test(errTail) || youtubeIpChallenge)) {
         job.phase = '自动重试'; job.err = '第一次下载异常，正在自动重试'; job.pct = 0; job.merging = false;
         return setTimeout(() => startAttempt(attempt + 1, cookieIndex), youtubeIpChallenge ? 1800 : 600);
       }
       job.status = 'error';
+      job.phase = '失败';
       if (youtubeIpChallenge) {
         job.err = 'YouTube 当前代理节点触发了临时风控（不是本工具要求 Cookie）。请在 Clash 切换节点后重新下载。';
       } else if (isXhs && xhsCookieReadFailed) {
@@ -743,7 +752,7 @@ function runYtdlpJob(job, options = {}) {
           ? '小红书没有返回可下载的视频。请确认这是视频笔记，并从小红书“分享→复制链接”取得最新地址后重试。'
           : '小红书页面需要登录状态，但这台电脑未找到可读取的 Chrome、Edge 或 Firefox 浏览器资料。';
       } else {
-        job.err = describeDownloadError(message);
+        job.err = (isBili && bilibiliDownload.describeFailure(errTail)) || describeDownloadError(message);
         if (isYouTubeUrl(url) && !ACTIVE_PROXY) job.err += '（YouTube 需先启动 Clash，再重启工具）';
       }
     });

@@ -25,6 +25,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Douyin anonymous resolver syntax check failed.
 if ($LASTEXITCODE -ne 0) { throw 'Link parser smoke test failed.' }
 & $Node (Join-Path $Root 'tests\runtime.js')
 if ($LASTEXITCODE -ne 0) { throw 'Runtime integrity tests failed.' }
+& $Node (Join-Path $Root 'tests\bilibili-download.js')
+if ($LASTEXITCODE -ne 0) { throw 'Bilibili fallback tests failed.' }
 & $Node (Join-Path $Root 'tests\yangshipin.js')
 if ($LASTEXITCODE -ne 0) { throw 'Yangshipin adapter tests failed.' }
 & $Node (Join-Path $Root 'tests\browser-resolver.js')

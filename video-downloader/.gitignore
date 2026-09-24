@@ -43,3 +43,5 @@ node_modules/
 *.mp3
 *.m4a
 *.webm
+__pycache__/
+*.pyc

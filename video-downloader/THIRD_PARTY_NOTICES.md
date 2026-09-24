@@ -30,3 +30,6 @@ GitHub 源码和 `video-downloader-windows-x64.zip` 只包含本项目源码、�
 - 软件许可证不授予所下载视频的版权，也不代替网站的访问与使用条件。
 
 感谢 yt-dlp、youtube-dl、FFmpeg、Node.js 及其依赖的作者和贡献者。
+## Bilibili 下载适配
+
+`scripts/yt-dlp-plugins/leetools/yt_dlp_plugins/extractor/leetools_bilibili.py` 是本项目编写的 MIT 插件，通过 yt-dlp 的插件接口扩展 Bilibili 提取器，只补充原站返回的备用 URL。插件随源码提供；yt-dlp 程序本身的许可与获取方式仍以本文原有说明为准。
