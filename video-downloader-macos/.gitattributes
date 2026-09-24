@@ -1,0 +1,11 @@
+* text=auto
+# These text rules apply only to this tool directory.
+*.js text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+
+*.sh text eol=lf
+*.command text eol=lf

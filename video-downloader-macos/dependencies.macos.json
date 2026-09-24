@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "platform": "darwin",
+  "minimumMacOS": "13.0",
+  "architectures": {
+    "arm64": {
+      "node": {
+        "version": "v22.14.0",
+        "prefix": "node-v22.14.0-darwin-arm64",
+        "sha256": "e9404633bc02a5162c5c573b1e2490f5fb44648345d64a958b17e325729a5e42",
+        "executableSha256": "e2d4915d03eda6a2f00a09920e7eeb7a04ad123f9aaad61b1481179fe1bf50e0",
+        "urls": [
+          "https://nodejs.org/dist/v22.14.0/node-v22.14.0-darwin-arm64.tar.gz",
+          "https://registry.npmmirror.com/-/binary/node/v22.14.0/node-v22.14.0-darwin-arm64.tar.gz"
+        ]
+      },
+      "ffmpeg": {
+        "version": "9.0.2",
+        "build": "arm64/1789931890_9.0.2",
+        "archiveSha256": "c8ed4c4e6978a03c485edbfe4e0a5dc2380f8a30bba5150531b31b094492d924",
+        "sha256": "2e11c6f90993cdb79fff84d3f90044d28316b310e75b3e030cfc9a54f2c9d384",
+        "urls": [
+          "https://ffmpeg.martin-riedl.de/download/macos/arm64/1789931890_9.0.2/ffmpeg.zip"
+        ]
+      }
+    },
+    "x64": {
+      "node": {
+        "version": "v22.14.0",
+        "prefix": "node-v22.14.0-darwin-x64",
+        "sha256": "6698587713ab565a94a360e091df9f6d91c8fadda6d00f0cf6526e9b40bed250",
+        "executableSha256": "96df1150d8a9e72a34e7337f5032169aa7ff500c934d67bd2abcc40683fe006c",
+        "urls": [
+          "https://nodejs.org/dist/v22.14.0/node-v22.14.0-darwin-x64.tar.gz",
+          "https://registry.npmmirror.com/-/binary/node/v22.14.0/node-v22.14.0-darwin-x64.tar.gz"
+        ]
+      },
+      "ffmpeg": {
+        "version": "9.0.2",
+        "build": "amd64/1789931006_9.0.2",
+        "archiveSha256": "7c6b4125b191cbf773832dc51f424cf2b6bb7da43007d1e066f95909e47cacd4",
+        "sha256": "b25689cf2211c0582d317e849912769a1f1c93904fe102c485b5364a425633d1",
+        "urls": [
+          "https://ffmpeg.martin-riedl.de/download/macos/amd64/1789931006_9.0.2/ffmpeg.zip"
+        ]
+      }
+    }
+  },
+  "ytDlp": {
+    "channel": "nightly",
+    "version": "2026.08.04.234419",
+    "sha256": "a41cb8f4f6362bd5738498ee5e338fe7bd34cf851567afb052a9db2cacf1da07",
+    "urls": [
+      "https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/download/2026.08.04.234419/yt-dlp_macos",
+      "https://ghfast.top/https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/download/2026.08.04.234419/yt-dlp_macos"
+    ]
+  }
+}

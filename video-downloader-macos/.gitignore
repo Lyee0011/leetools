@@ -1,0 +1,46 @@
+# Runtime binaries are rebuilt by scripts/bootstrap-windows.ps1
+bin/
+
+# Per-computer preferences and generated files
+config.json
+.DS_Store
+*.part
+*.log
+.视频下载器临时/
+.cleanroom/
+dist/
+
+# Editor and package-manager noise
+.vscode/
+.idea/
+node_modules/
+
+
+# Public release privacy and generated-file exclusions
+.env
+.env.*
+!.env.example
+**/config.json
+**/bin/
+**/dist/
+**/.cleanroom/
+**/node_modules/
+**/User Data/
+**/Cookies
+**/cookies.txt
+**/cookies.json
+**/browser-profile*/
+*.db
+*.sqlite
+*.exe
+*.dll
+*.zip
+*.mp4
+*.mkv
+*.mov
+*.mp3
+*.m4a
+*.webm
+
+# Source packs only; never distribute local runtime or test state
+*.tar.gz
