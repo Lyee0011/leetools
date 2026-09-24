@@ -22,13 +22,15 @@ if ! mkdir "$LOCK" 2>/dev/null; then
   die '另一个安装可能正在进行。如果已中断，请先确认没有安装窗口运行，再删除 bin/.setup-lock 后重试。'
 fi
 STAGE=''
+BOOTSTRAP_COMPLETE=0
 cleanup() {
   if [ -n "$STAGE" ]; then
     case "$STAGE" in "$BIN"/.setup.*) rm -rf -- "$STAGE" ;; esac
   fi
   rmdir "$LOCK" 2>/dev/null || true
 }
-trap cleanup EXIT
+# Bash 3.2 can report nounset failures as zero inside EXIT; require full completion.
+trap 'result=$?; cleanup; if [ "$BOOTSTRAP_COMPLETE" != 1 ] && [ "$result" = 0 ]; then result=1; fi; exit "$result"' EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 STAGE="$(mktemp -d "$BIN/.setup.XXXXXX")"
@@ -66,7 +68,7 @@ for COMPONENT in ffmpeg ytDlp; do
   if [ "$COMPONENT" = ffmpeg ]; then KEY="architectures.$ARCH.ffmpeg"; NAME=ffmpeg; STEP=2; else KEY=ytDlp; NAME=yt-dlp; STEP=3; fi
   HASH="$(value "$KEY.sha256")"
   if ! hash_ok "$BIN/$NAME" "$HASH"; then
-    printf '%s\n' "$STEP/3 准备 $NAME…" >&2
+    printf '%s\n' "$STEP/3 准备 ${NAME}…" >&2
     if [ "$COMPONENT" = ffmpeg ]; then
       download "$KEY" "$(value "$KEY.archiveSha256")" "$STAGE/ffmpeg.zip"
       unzip -p "$STAGE/ffmpeg.zip" ffmpeg > "$STAGE/ffmpeg"
@@ -87,4 +89,5 @@ chmod 755 "$BIN/node" "$BIN/ffmpeg" "$BIN/yt-dlp"
 "$BIN/ffmpeg" -version > "$STAGE/ffmpeg-version.txt"
 head -n 1 "$STAGE/ffmpeg-version.txt" >&2
 "$BIN/yt-dlp" --ignore-config --version >&2
-printf '%s\n' "运行组件已校验（$ARCH）。" >&2
+printf '%s\n' "运行组件已校验（${ARCH}）。" >&2
+BOOTSTRAP_COMPLETE=1

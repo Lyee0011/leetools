@@ -21,3 +21,5 @@ Node 解压包的完整 LICENSE 会保存在本机 `bin/Node-LICENSE.txt`，包�
 - 许可证不授予视频版权或网站访问权限。仅下载有权保存的内容。
 
 本次没有把第三方二进制加入 Git 或预览 ZIP。感谢 yt-dlp、youtube-dl、FFmpeg、Node.js、Martin Riedl 及相关依赖的维护者。
+
+2026-09-24 Apple Silicon 实机安装沿用上述固定版本、来源与 SHA-256，未修改依赖清单。Bash 3.2 修复仅涉及本项目安装脚本及回归测试；组件仍在执行前校验，二进制与本机验收日志保留在被 Git 忽略的 `bin/` 中。

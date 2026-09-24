@@ -1,10 +1,10 @@
 # 验证记录
 
-日期：2026-09-24。开发环境：Windows，测试对象是独立的 `video-downloader-macos/`，原 Windows 目录不修改。
+日期：2026-09-24。初始开发环境：Windows；本机 Apple Silicon 验收见末尾。测试对象是独立的 `video-downloader-macos/`，原 Windows 目录不修改。
 
 ## 当前状态
 
-**macOS 预览版，尚未通过 Mac 实机验收。** “已通过”只指下面明确列出的开发主机检查，不代表 Mac 双击启动、系统权限或各网站下载已成功。
+**macOS 预览版，已通过下述 Apple Silicon Mac 实机自动检查，完整手动验收尚未完成。** 开发主机检查与 Mac 实机检查分开列出；不代表 Mac 双击启动、系统权限或各网站下载已成功。
 
 ## 开发主机已通过
 
@@ -22,7 +22,7 @@
 - Mach-O 文件头静态检查：Node 对应 arm64/x64，最低系统 11；FFmpeg 对应 arm64/x64，最低系统 12；yt-dlp 外层含 arm64/x64。动态库引用限系统路径。此项不是执行或签名验收。
 - 本项目把最低系统设为 macOS 13；旧系统未承诺兼容。
 
-## Mac 上待做
+## Mac 验收清单（原始计划；本次完成情况见末尾）
 
 1. 无预装 Node/Python/Homebrew 时首次准备组件成功；重复启动不下载未变组件、不新增后台。
 2. Apple Silicon 原生启动；若终端使用 Rosetta，仍选择 arm64。Intel 另外实测。
@@ -53,4 +53,19 @@
 
 ## GitHub 源码交付
 
-安装说明提供公开的 `video-downloader-macos` 目录链接，供 Mac 上的 Agent 读取并安装，无需单独传输 ZIP。此调整仅修改说明和忽略规则注释，不改变已测试的运行代码。Mac 仍为待实机验收的预览版；原 `video-downloader` 目录和 Windows Release 保持不变。
+安装说明提供公开的 `video-downloader-macos` 目录链接，供 Mac 上的 Agent 读取并安装，无需单独传输 ZIP。该次交付仅修改说明和忽略规则注释，不改变已测试的运行代码。交付时 Mac 为待实机验收的预览版；随后本机验收见下节，原 `video-downloader` 目录和 Windows Release 保持不变。
+
+## Apple Silicon 实机自动验收（2026-09-24）
+
+- 环境：macOS 26.2（25C56），arm64；使用系统 `/bin/bash`，源码基线 `03cc04391234cc22eb0ecc6bd4bf0cf4021f23a6`。独立目录安装，仅检出 Mac 项目。
+- 首次安装发现 Bash 3.2 会把 `$NAME…`、`$ARCH）。` 的中文标点误计入变量名；改用花括号明确边界。另复现 EXIT 清理会把 nounset 错误返回为 0，增加完整结束标志，未完成准备即使状态为 0 也返回失败。新增测试先复现失败，再验证修复及正常/显式失败退出码。
+- 安装成功：`ok:true`、`started:true`、`platform:darwin`、`arch:arm64`；Node v22.14.0、FFmpeg 9.0.2、yt-dlp 2026.08.04.234419 均按未改动清单验证哈希。Node、FFmpeg 为 arm64，yt-dlp 通用二进制含 arm64。
+- `/bin/bash tests/smoke-macos.sh --browser` 退出码 0。源码、组件完整性、Mac 适配、服务故障、央视频协议、浏览器发现、HTTP 安全和下载完整性全部通过。
+- 本机生成的音视频经过真实 yt-dlp / FFmpeg 下载、检查与封装；缺失 HLS 分段拒绝成功、完整 HLS 成为 MP4、已有文件保留、检查不访问远端播放列表、三任务上限通过。
+- 已安装 Chrome 的匿名动态页解析通过：找到本地 MP4、下载内容一致、含画面与声音；无音轨、受保护与空页面正确失败；一次性浏览器资料清理通过。未读取个人 Cookie，未测试外部私人或付费内容。
+- 实际生命周期通过：重复启动复用同一 PID / build / instance；空闲停止后原进程退出且新 TCP 连接被拒绝；再次停止返回 `stopped:0`；重启获得新 PID，页面与组件状态健康，再次启动仍复用。
+- 生命周期核对使用启动器返回的实际 URL、PID、build 和 instance；验证停止前后 PID 改变、构建与安装身份保持一致。具体本机标识仅保留在未提交的日志中，日后仍以启动器返回值为准。
+- 仅监听 `127.0.0.1`。本机日志位于 `bin/acceptance-smoke.log`、`bin/acceptance-lifecycle.log`，不进入 Git 或公开包；本地生命周期核对脚本也仅保存在 `bin/`。
+- 通过 `/bin/bash 视频下载器-macOS.command` 调用正式启动入口成功并自动打开浏览器；最终页面已打开并检查渲染，下载输入框、默认保存位置和三个就绪组件显示正常。此项不替代 Finder 双击及原生选择器验收。
+
+仍需手动确认：Finder 双击 `.command` 及系统权限提示；原生文件夹选择/取消（包括中文和空格目录）；Finder 文件定位；用户有权下载的真实平台视频及成品播放；下载进行中使用停止入口的实际交互；清历史后磁盘文件仍存在。后两项已有自动逻辑测试，但不冒充真实 UI 验收。未验证全新无预装环境、Rosetta、Intel 或其他 macOS 版本。仍保留预览状态，不变更 Windows 目录或发布资产。
