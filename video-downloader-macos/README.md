@@ -13,7 +13,9 @@
 
 ## 开始使用
 
-1. 把 Mac 预览包完整解压到自己的可写文件夹，例如「下载」。不要在 ZIP 内运行，也不要放进系统目录。
+源码入口：**[video-downloader-macos](https://github.com/Lyee0011/leetools/tree/main/video-downloader-macos)**。可以直接把这个链接交给 Mac 上的 Agent，按下方「给 Agent 安装」操作，无需另找启动包。
+
+1. 从 GitHub 获取本仓库到自己的可写文件夹，例如「下载」，完整保留 `video-downloader-macos` 目录。使用源码压缩包时先完整解压；不要放进系统目录。
 2. 打开 `video-downloader-macos` 文件夹，双击 **`视频下载器-macOS.command`**。
 3. 首次运行会显示组件准备进度，完成后自动打开浏览器。粘贴链接开始下载；默认保存到 `~/Downloads/视频素材`，可点「更改」。
 4. 下载完成后点「在文件夹中显示」，会在 Finder 中定位。清理历史只清界面记录，保留磁盘文件和正在下载的任务。
@@ -49,9 +51,9 @@
 
 ## 给 Agent 安装
 
-把本目录链接及下面一句话交给 Mac 上的 Agent：
+把下面这段话交给 Mac 上的 Agent：
 
-> 请读取 video-downloader-macos 的 AGENTS.md 和 INSTALL.md，把 Mac 预览版安装到我的可写目录，运行 scripts/install-macos.sh --json，核验返回的服务、构建和组件状态；不要操作 video-downloader 的 Windows 版，不要导入任何个人 Cookie。
+> 请读取 https://github.com/Lyee0011/leetools/tree/main/video-downloader-macos 中的 AGENTS.md、README.md 和 INSTALL.md，将 Mac 预览版源码保存到这台 Mac 的独立可写目录，运行 /bin/bash scripts/install-macos.sh --json 和 /bin/bash tests/smoke-macos.sh，核验芯片架构、组件、服务及重复启动，检查空闲停止后能否重新启动。遇到问题只修复 Mac 目录并复测，不动 Windows 项目，不读取个人 Cookie，不关闭系统安全保护。完成后打开界面让我试视频链接，说明哪些检查已通过、哪些仍需手动确认。
 
 [INSTALL.md](INSTALL.md) 提供统一安装、验证、停止和错误处理方法。
 
@@ -60,7 +62,7 @@
 - 仅监听 `127.0.0.1`，不向作者上传网址、视频或账号状态。安装时访问清单中的组件来源，下载时连接视频网站。
 - 不读取个人浏览器登录状态，不导出 Cookie。备用浏览器用一次性资料目录，完成后关闭并清理。
 - 自有源码采用 [MIT License](LICENSE)。Node.js、yt-dlp 和 FFmpeg 保留各自许可，详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
-- 分享的 ZIP 仅包含源码、脚本和说明，不包含第三方可执行文件、账号信息和个人配置。请勿把安装后生成的 `bin/` 直接打包转发。
+- GitHub 上仅分享源码、脚本和说明，不包含第三方可执行文件、账号信息和个人配置。请勿把安装后生成的 `bin/` 直接打包转发。
 - `config.json` 只保存本机设置；升级时先停止旧服务，将新版本解压到新文件夹，再选择保存目录。
 - 卸载时先停止本目录服务，删除解压文件夹即可；另存的视频不会被自动删除。
 

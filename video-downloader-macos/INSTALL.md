@@ -4,7 +4,11 @@
 
 ## 安装
 
-选择用户可写目录，完整解压源码。无需 sudo、npm install、Homebrew 或全局环境修改。保留该目录自己的 LICENSE 和第三方声明。
+源码入口：[video-downloader-macos](https://github.com/Lyee0011/leetools/tree/main/video-downloader-macos)。先读取该目录的 AGENTS.md、README.md 和本说明，再将完整源码保存到用户可写的独立目录。无需另行寻找 Mac Release 或下载 Windows 启动包。
+
+已有 Git 时可克隆 `https://github.com/Lyee0011/leetools.git` 到一个尚不存在的新目录，再进入其中的 `video-downloader-macos`；也可以获取 GitHub 源码归档并完整解压。不要只保存网页 HTML、README 或启动脚本，也不要覆盖用户已有的安装或未提交改动。记录本次获取的提交号，便于反馈和复测。
+
+无需 sudo、npm install、Homebrew 或全局环境修改。保留该目录自己的 LICENSE 和第三方声明。
 
 ```bash
 cd "/实际路径/video-downloader-macos"

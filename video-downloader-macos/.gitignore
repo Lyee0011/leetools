@@ -1,4 +1,4 @@
-# Runtime binaries are rebuilt by scripts/bootstrap-windows.ps1
+# Runtime binaries are prepared by scripts/bootstrap-macos.sh
 bin/
 
 # Per-computer preferences and generated files
